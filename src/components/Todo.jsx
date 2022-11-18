@@ -57,6 +57,7 @@ const Todo = () => {
                   type="text"
                   className="form-control  "
                   placeholder="Enter your TODO"
+                  required
                 />
                 <button
                   className="btn bg-warning"
