@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 
@@ -7,28 +7,37 @@ const Todo = () => {
   const [todoList, setTodoList] = useState([]);
   const [isAddButton, setIsAddButton] = useState(true);
   const [editId, setEditId] = useState(null);
-  console.log("editId:", editId);
+  const [errorMsg,setErrorMsg] = useState("");
+  console.log('errorMsg :>> ', errorMsg);
+
+  //console.log("editId:", editId);
   // console.log("todoList:", todoList);
   //console.log("data",data)
 
   const submitted = (event) => {
     event.preventDefault();
+
+    if (data.length === 0) {
+      setErrorMsg("please enter the todo!!!")
+      
+    }else{
+      
+
     if (isAddButton) {
       const newdata = [...todoList, data];
-      //console.log("newdata", newdata);
       setData("");
       setTodoList(newdata);
     } else {
-     
-      let oldData =[...todoList]      
-      
+      let oldData = [...todoList];
+
       oldData[editId] = data;
-      
-      console.log("oldData:", oldData);
+
+      //console.log("oldData:", oldData);
       setTodoList(oldData);
-      setIsAddButton(true)
+      setIsAddButton(true);
       setData("");
-      }
+    }
+  }
   };
 
   const deleted = (item) => {
@@ -42,6 +51,12 @@ const Todo = () => {
     setData(value);
     setEditId(index);
   };
+
+ useEffect(()=> {
+    if(data.length >0){
+      setErrorMsg("")
+}
+ } ,[data])
 
   return (
     <div className="container my-5">
@@ -57,8 +72,9 @@ const Todo = () => {
                   type="text"
                   className="form-control  "
                   placeholder="Enter your TODO"
-                  required
+                  
                 />
+               
                 <button
                   className="btn bg-warning"
                   type="submit"
@@ -66,8 +82,12 @@ const Todo = () => {
                 >
                   {isAddButton ? "ADD" : "Updata"}
                 </button>
+              
               </div>
             </form>
+            <div className="d-flex justify-content-center text-white fw-bold">
+                  <p>{errorMsg}</p>
+                </div>  
           </CardContent>
         </Card>
       </div>
@@ -79,13 +99,11 @@ const Todo = () => {
       >
         {Array.isArray(todoList) &&
           todoList.map((value, index) => (
-            
             <div
               className="card justify-content-center align-items-center"
               key={index}
               style={{ height: 150, width: 250 }}
             >
-              
               <div className="card-body">{value}</div>
               <div className="submitbtn">
                 <button
